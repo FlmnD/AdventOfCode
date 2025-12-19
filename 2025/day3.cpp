@@ -1,6 +1,8 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <vector>
+#include <algorithm>
 
 using namespace std;
 
@@ -47,4 +49,58 @@ int main()
 
 // PART 2
 
+int main()
+{
 
+    ifstream file("day2.txt");
+
+    string line;
+
+    vector<char> stack;
+
+    ll voltagetot = 0;
+
+    while (getline(file, line))
+    {
+
+        ll removenum = line.size() - 12;
+
+        for (size_t i = 0; i < line.size(); i++)
+        {
+
+            while (!stack.empty() && stack.back() < line[i] && removenum > 0)
+            {
+                stack.pop_back();
+                removenum--;
+            }
+
+            
+
+            stack.push_back(line[i]);
+        }
+
+        while (removenum > 0 && !stack.empty())
+        {
+            stack.pop_back();
+            removenum--;
+        }
+
+        cout << removenum << "\n";
+
+        string numstr = "";
+
+        for_each(stack.begin(), stack.end(), [&numstr](char element)
+                 { numstr.append(1, element); });
+
+        cout << numstr << "\n";
+
+        voltagetot += stoll(numstr);
+
+        stack.clear();
+    }
+
+    cout << "\n"
+         << voltagetot << "\n";
+
+    return 0;
+}
